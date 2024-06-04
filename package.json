@@ -1,18 +1,22 @@
 {
-  "name": "shieldjs",
+  "name": "defendjs",
   "version": "1.0.0",
   "description": "Middleware to detect and alert security vulnerabilities in real-time development mode",
-  "main": "index.js",
+  "main": "middleware/index.js",
+  "type": "module",
   "scripts": {
+    "start": "node index.js",
     "test": "mocha tests"
   },
-  "author": "",
+  "author": "Preethi",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "sinon": "^18.0.0"
   },
   "devDependencies": {
     "chai": "^5.1.1",
     "mocha": "^10.4.0"
-  }
+  },
+  "keywords": ["security", "middleware", "nodejs", "express", "vulnerabilities"]
 }
