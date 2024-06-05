@@ -1,11 +1,9 @@
- //imported for assertions
-import sinon from 'sinon'; //imported for creating spies and mocks
+import sinon from 'sinon';
 import securityMiddleware from '../middleware/index.js';
-
 import { expect } from 'chai';
 
-//descibe groups releated test cases
 describe('Security Middleware', () => {
+    // Test case 1: SQL Injection
     it('should detect SQL injection patterns in query parameters', () => {
         const req = {
             query: { user: "admin' --" },
@@ -14,14 +12,16 @@ describe('Security Middleware', () => {
         const res = {};
         const next = sinon.spy();
 
-        console.warn = sinon.spy(); //to verify that the middleware logs a warning.
+        console.warn = sinon.spy();
         securityMiddleware(req, res, next);
 
-        expect(console.warn.calledOnce).to.be.true; //calledonce
-        expect(console.warn.calledWithMatch(/Vulnerabilities detected/)).to.be.true; //calledwithmatch
-        expect(next.calledOnce).to.be.true; //next calledonce
+        expect(console.warn.calledOnce).to.be.true;
+        expect(console.warn.calledWithMatch(/Possible SQL injection detected/)).to.be.true;
+        expect(console.warn.calledWithMatch(/Single quote character found/)).to.be.true;
+        expect(next.calledOnce).to.be.true;
     });
-     // Test case 2 : XSS
+
+    // Test case 2: XSS
     it('should detect XSS patterns in request body', () => {
         const req = {
             query: {},
@@ -34,10 +34,12 @@ describe('Security Middleware', () => {
         securityMiddleware(req, res, next);
 
         expect(console.warn.calledOnce).to.be.true;
-        expect(console.warn.calledWithMatch(/Vulnerabilities detected/)).to.be.true;
+        expect(console.warn.calledWithMatch(/Possible XSS attack detected/)).to.be.true;
+        expect(console.warn.calledWithMatch(/Script tags found/)).to.be.true;
         expect(next.calledOnce).to.be.true;
     });
 
+    // Test case 3: Safe inputs
     it('should call next() without warnings for safe inputs', () => {
         const req = {
             query: { user: 'safeUser' },

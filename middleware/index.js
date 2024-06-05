@@ -31,22 +31,23 @@ const scanForVulnerabilities = (input) => {
  * @param {object} res - The HTTP response object.
  * @param {function} next - The next middleware function in the stack.
  */
+
 export default (req, res, next) => {
-    // Combine query parameters and request body into a single array of inputs
+    // Combine all query parameters and request body into a single array of inputs
     const inputs = [...Object.values(req.query), ...Object.values(req.body)];
-     
     console.log(inputs); //to be removed after testing
     // Iterate over each input to scan for vulnerabilities
     inputs.forEach(input => {
         if (typeof input === 'string') {
             const detectedVulnerabilities = scanForVulnerabilities(input);
-            // If any vulnerabilities are detected, log them to the console
-            if (detectedVulnerabilities.length > 0) {
-                console.warn(`Vulnerabilities detected: ${JSON.stringify(detectedVulnerabilities)}`);
-            }
+            detectedVulnerabilities.forEach(vulnerability => {
+                console.warn(`Vulnerability detected: ${vulnerability.message} 
+                Input: ${vulnerability.input}
+                Pattern: ${vulnerability.pattern} 
+                Suggested fix: ${vulnerability.fix}`);
+            });
         }
     });
-
-    // Proceed to the next middleware or route handler
+ // Proceed to the next middleware or route handler
     next();
 };
