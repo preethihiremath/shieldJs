@@ -1,6 +1,6 @@
 import { detectSQLInjection } from './sqlInjection.js';
 import { detectXSS } from './xss.js';
-
+import chalk from 'chalk';
 /**
  * Scans a given input for known security vulnerabilities (SQL Injection and XSS).
  * @param {string} input - The input string to be scanned for vulnerabilities.
@@ -41,10 +41,9 @@ export default (req, res, next) => {
         if (typeof input === 'string') {
             const detectedVulnerabilities = scanForVulnerabilities(input);
             detectedVulnerabilities.forEach(vulnerability => {
-                console.warn(`Vulnerability detected: ${vulnerability.message} 
-                Input: ${vulnerability.input}
-                Pattern: ${vulnerability.pattern} 
-                Suggested fix: ${vulnerability.fix}`);
+                console.warn(chalk.yellow(`WARN: Vulnerability detected: ${vulnerability.message} `));
+                console.warn(chalk.yellow(`Input: ${vulnerability.input}`));
+                console.warn( chalk.green(`Suggested fix: ${vulnerability.fix}`));
             });
         }
     });
