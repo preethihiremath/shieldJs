@@ -19,6 +19,10 @@ const scanForVulnerabilities = (input) => {
     if (xssResult) {
         results.push(xssResult);
     }
+    const cryptoFailureResult = detectCryptoFailure(input);
+    if (cryptoFailureResult) {
+        results.push(...cryptoFailureResult);
+    }
 
     return results;
 };
