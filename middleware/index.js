@@ -23,6 +23,10 @@ const scanForVulnerabilities = (input) => {
     if (cryptoFailureResult) {
         results.push(...cryptoFailureResult);
     }
+    const ssrfResult = detectSSRF(input);
+    if (ssrfResult) {
+        results.push(ssrfResult);
+    }
 
     return results;
 };
